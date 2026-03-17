@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { ThemeProvider } from "next-themes";
 import { QueryProvider } from "./QueryProvider";
 import { WagmiProvider } from "./WagmiProvider";
 import { WalletProvider } from "./WalletProvider";
@@ -10,18 +11,20 @@ import { ToastProvider, ToastViewport } from "@/components/ui/toast";
 
 export function Providers({ children }: { children: ReactNode }) {
   return (
-    <WagmiProvider>
-      <QueryProvider>
-        <WalletProvider>
-          <TradingProvider>
-            <ToastProvider>
-              {children}
-              <AuthModal />
-              <ToastViewport />
-            </ToastProvider>
-          </TradingProvider>
-        </WalletProvider>
-      </QueryProvider>
-    </WagmiProvider>
+    <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+      <WagmiProvider>
+        <QueryProvider>
+          <WalletProvider>
+            <TradingProvider>
+              <ToastProvider>
+                {children}
+                <AuthModal />
+                <ToastViewport />
+              </ToastProvider>
+            </TradingProvider>
+          </WalletProvider>
+        </QueryProvider>
+      </WagmiProvider>
+    </ThemeProvider>
   );
 }

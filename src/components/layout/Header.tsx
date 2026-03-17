@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useWallet } from "@/providers/WalletProvider";
 import { shortenAddress } from "@/lib/utils";
 import { Wallet, LogOut, ChevronDown, Trophy } from "lucide-react";
+import { ThemeToggle } from "./ThemeToggle";
 
 export function Header() {
   const { isConnected, eoaAddress, authMethod, disconnect, openAuthModal } =
@@ -64,6 +65,8 @@ export function Header() {
               Connect
             </Button>
           )}
+
+          <ThemeToggle />
 
           {/* Mobile nav */}
           <Link href="/markets" className="md:hidden">

@@ -9,6 +9,7 @@ import {
   Tooltip,
   CartesianGrid,
 } from "recharts";
+import { useTheme } from "next-themes";
 import type { PriceHistoryPoint } from "@/lib/polymarket/types";
 
 interface PriceChartProps {
@@ -23,7 +24,27 @@ function formatTimestamp(t: number): string {
   });
 }
 
+const CHART_COLORS = {
+  light: {
+    grid: "#E2E0F0",
+    axis: "#64748B",
+    tooltipBg: "#FFFFFF",
+    tooltipBorder: "#E2E0F0",
+    tooltipText: "#1a1a2e",
+  },
+  dark: {
+    grid: "#1e1050",
+    axis: "#94A3B8",
+    tooltipBg: "#0D0535",
+    tooltipBorder: "#1e1050",
+    tooltipText: "#F8F7FF",
+  },
+};
+
 export function PriceChart({ data, isLoading }: PriceChartProps) {
+  const { resolvedTheme } = useTheme();
+  const colors = CHART_COLORS[resolvedTheme === "dark" ? "dark" : "light"];
+
   if (isLoading) {
     return (
       <div className="rounded-xl border border-border bg-card p-4">
@@ -82,20 +103,20 @@ export function PriceChart({ data, isLoading }: PriceChartProps) {
             </defs>
             <CartesianGrid
               strokeDasharray="3 3"
-              stroke="#1e1050"
+              stroke={colors.grid}
               vertical={false}
             />
             <XAxis
               dataKey="time"
               tickFormatter={formatTimestamp}
-              tick={{ fontSize: 10, fill: "#94A3B8" }}
+              tick={{ fontSize: 10, fill: colors.axis }}
               axisLine={false}
               tickLine={false}
               minTickGap={40}
             />
             <YAxis
               tickFormatter={(v: number) => `${v.toFixed(0)}¢`}
-              tick={{ fontSize: 10, fill: "#94A3B8" }}
+              tick={{ fontSize: 10, fill: colors.axis }}
               axisLine={false}
               tickLine={false}
               domain={["auto", "auto"]}
@@ -103,11 +124,11 @@ export function PriceChart({ data, isLoading }: PriceChartProps) {
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: "#0D0535",
-                border: "1px solid #1e1050",
+                backgroundColor: colors.tooltipBg,
+                border: `1px solid ${colors.tooltipBorder}`,
                 borderRadius: "8px",
                 fontSize: "12px",
-                color: "#F8F7FF",
+                color: colors.tooltipText,
               }}
               formatter={(value) => [
                 `${Number(value ?? 0).toFixed(1)}¢`,
