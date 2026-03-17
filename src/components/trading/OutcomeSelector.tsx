@@ -19,7 +19,7 @@ export function OutcomeSelector({
 }: OutcomeSelectorProps) {
   return (
     <div className="space-y-2">
-      <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+      <h3 className="text-sm font-semibold text-silver">
         Select Outcome
       </h3>
       <div className="grid grid-cols-2 gap-2">
@@ -35,9 +35,9 @@ export function OutcomeSelector({
                 "relative flex flex-col items-center rounded-xl border-2 p-4 transition-all cursor-pointer",
                 isSelected
                   ? isYes
-                    ? "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/30"
-                    : "border-red-500 bg-red-50 dark:bg-red-950/30"
-                  : "border-zinc-200 hover:border-zinc-300 dark:border-zinc-700 dark:hover:border-zinc-600",
+                    ? "border-buy-green bg-buy-green/10"
+                    : "border-sell-red bg-sell-red/10"
+                  : "border-border hover:border-silver",
                 disabled && "opacity-50 cursor-not-allowed"
               )}
             >
@@ -46,9 +46,9 @@ export function OutcomeSelector({
                   "text-2xl font-bold tabular-nums",
                   isSelected
                     ? isYes
-                      ? "text-emerald-600 dark:text-emerald-400"
-                      : "text-red-500"
-                    : "text-zinc-700 dark:text-zinc-300"
+                      ? "text-buy-green"
+                      : "text-sell-red"
+                    : "text-silver"
                 )}
               >
                 {formatPercent(prices[i] ?? 0)}
@@ -58,9 +58,9 @@ export function OutcomeSelector({
                   "text-sm font-medium mt-1",
                   isSelected
                     ? isYes
-                      ? "text-emerald-700 dark:text-emerald-300"
-                      : "text-red-600 dark:text-red-400"
-                    : "text-zinc-500 dark:text-zinc-400"
+                      ? "text-buy-green"
+                      : "text-sell-red"
+                    : "text-silver"
                 )}
               >
                 {outcome}
@@ -69,7 +69,7 @@ export function OutcomeSelector({
                 <div
                   className={cn(
                     "absolute top-2 right-2 h-2 w-2 rounded-full",
-                    isYes ? "bg-emerald-500" : "bg-red-500"
+                    isYes ? "bg-buy-green" : "bg-sell-red"
                   )}
                 />
               )}

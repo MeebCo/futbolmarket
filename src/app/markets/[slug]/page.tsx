@@ -68,12 +68,12 @@ export default function MarketDetailPage() {
     return (
       <div className="mx-auto max-w-7xl px-4 py-16 text-center">
         <h1 className="text-2xl font-bold">Market not found</h1>
-        <p className="mt-2 text-zinc-500">
+        <p className="mt-2 text-silver">
           This market may not exist or may have been removed.
         </p>
         <Link
           href="/markets"
-          className="mt-4 inline-flex items-center text-emerald-600 hover:underline"
+          className="mt-4 inline-flex items-center text-purple hover:underline"
         >
           <ArrowLeft className="mr-1 h-4 w-4" />
           Back to markets
@@ -87,7 +87,7 @@ export default function MarketDetailPage() {
       {/* Breadcrumb */}
       <Link
         href="/markets"
-        className="mb-6 inline-flex items-center text-sm text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 transition-colors"
+        className="mb-6 inline-flex items-center text-sm text-silver hover:text-foreground transition-colors"
       >
         <ArrowLeft className="mr-1 h-4 w-4" />
         Back to markets
@@ -114,7 +114,7 @@ export default function MarketDetailPage() {
                 <h1 className="text-xl font-bold leading-tight sm:text-2xl">
                   {market.question}
                 </h1>
-                <div className="mt-2 flex flex-wrap items-center gap-3 text-sm text-zinc-500 dark:text-zinc-400">
+                <div className="mt-2 flex flex-wrap items-center gap-3 text-sm text-silver">
                   <span className="flex items-center gap-1">
                     <BarChart3 className="h-3.5 w-3.5" />
                     {formatCompactNumber(market.volume)} volume
@@ -136,7 +136,7 @@ export default function MarketDetailPage() {
 
             {/* Description */}
             {market.description && (
-              <p className="mt-4 text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+              <p className="mt-4 text-sm text-silver leading-relaxed">
                 {market.description}
               </p>
             )}
@@ -152,7 +152,7 @@ export default function MarketDetailPage() {
         {/* Sidebar - trading */}
         <div className="space-y-6">
           {/* Outcome selector */}
-          <div className="rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950">
+          <div className="rounded-xl border border-border bg-card p-4">
             <OutcomeSelector
               outcomes={market.outcomes}
               prices={market.outcomePrices}
@@ -171,11 +171,11 @@ export default function MarketDetailPage() {
           )}
 
           {/* Market stats */}
-          <div className="rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950">
+          <div className="rounded-xl border border-border bg-card p-4">
             <h3 className="text-sm font-semibold mb-3">Market Info</h3>
             <dl className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <dt className="text-zinc-500 dark:text-zinc-400">
+                <dt className="text-silver">
                   Total Volume
                 </dt>
                 <dd className="font-medium">
@@ -183,41 +183,41 @@ export default function MarketDetailPage() {
                 </dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-zinc-500 dark:text-zinc-400">24h Volume</dt>
+                <dt className="text-silver">24h Volume</dt>
                 <dd className="font-medium">
                   {formatCompactNumber(market.volume24hr)}
                 </dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-zinc-500 dark:text-zinc-400">Liquidity</dt>
+                <dt className="text-silver">Liquidity</dt>
                 <dd className="font-medium">
                   {formatCompactNumber(market.liquidity)}
                 </dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-zinc-500 dark:text-zinc-400">Spread</dt>
+                <dt className="text-silver">Spread</dt>
                 <dd className="font-medium">
                   {(market.spread * 100).toFixed(1)}¢
                 </dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-zinc-500 dark:text-zinc-400">Best Bid</dt>
-                <dd className="font-medium text-emerald-600">
+                <dt className="text-silver">Best Bid</dt>
+                <dd className="font-medium text-buy-green">
                   {formatPercent(market.bestBid)}
                 </dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-zinc-500 dark:text-zinc-400">Best Ask</dt>
-                <dd className="font-medium text-red-500">
+                <dt className="text-silver">Best Ask</dt>
+                <dd className="font-medium text-sell-red">
                   {formatPercent(market.bestAsk)}
                 </dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-zinc-500 dark:text-zinc-400">Min Size</dt>
+                <dt className="text-silver">Min Size</dt>
                 <dd className="font-medium">${market.orderMinSize}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-zinc-500 dark:text-zinc-400">Tick Size</dt>
+                <dt className="text-silver">Tick Size</dt>
                 <dd className="font-medium">
                   {(market.orderPriceMinTickSize * 100).toFixed(1)}¢
                 </dd>

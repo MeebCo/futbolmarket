@@ -58,9 +58,9 @@ export default function PortfolioPage() {
     return (
       <div className="mx-auto max-w-7xl px-4 py-16">
         <div className="flex flex-col items-center justify-center text-center">
-          <Wallet className="h-12 w-12 text-zinc-400 mb-4" />
+          <Wallet className="h-12 w-12 text-silver mb-4" />
           <h1 className="text-2xl font-bold">Connect Your Wallet</h1>
-          <p className="mt-2 text-zinc-500 dark:text-zinc-400 max-w-md">
+          <p className="mt-2 text-silver max-w-md">
             Connect your wallet to view your positions, open orders, and trade
             history.
           </p>
@@ -79,13 +79,13 @@ export default function PortfolioPage() {
       <div className="mb-6">
         <Link
           href="/markets"
-          className="mb-4 inline-flex items-center text-sm text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 transition-colors"
+          className="mb-4 inline-flex items-center text-sm text-silver hover:text-foreground transition-colors"
         >
           <ArrowLeft className="mr-1 h-4 w-4" />
           Markets
         </Link>
         <h1 className="text-2xl font-bold">Portfolio</h1>
-        <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
+        <p className="text-sm text-silver mt-1">
           Manage your positions and orders.
         </p>
       </div>
@@ -101,7 +101,7 @@ export default function PortfolioPage() {
             <ClipboardList className="h-4 w-4" />
             Open Orders
             {ordersData?.orders?.length > 0 && (
-              <span className="ml-1 rounded-full bg-emerald-600 px-1.5 py-0.5 text-[10px] text-white">
+              <span className="ml-1 rounded-full bg-purple px-1.5 py-0.5 text-[10px] text-white">
                 {ordersData.orders.length}
               </span>
             )}

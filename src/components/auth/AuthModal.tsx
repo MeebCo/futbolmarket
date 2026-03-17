@@ -20,7 +20,7 @@ export function AuthModal() {
     <Dialog open={isAuthModalOpen} onOpenChange={closeAuthModal}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Connect to FutbolMarket</DialogTitle>
+          <DialogTitle>Connect to Meebits Fútbol</DialogTitle>
           <DialogDescription>
             Connect your wallet or sign in with email to start trading.
           </DialogDescription>
@@ -47,7 +47,7 @@ export function AuthModal() {
           </TabsContent>
         </Tabs>
 
-        <p className="text-[11px] text-center text-zinc-500 dark:text-zinc-400 mt-2">
+        <p className="text-[11px] text-center text-silver mt-2">
           By connecting, you agree to our Terms of Service. All trades are
           settled on Polygon via Polymarket.
         </p>

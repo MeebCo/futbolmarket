@@ -28,7 +28,7 @@ export function ConnectWalletButton() {
           {isPending ? (
             <Loader2 className="h-5 w-5 animate-spin" />
           ) : (
-            <div className="h-5 w-5 rounded-full bg-zinc-200 dark:bg-zinc-700" />
+            <div className="h-5 w-5 rounded-full bg-surface" />
           )}
           <span className="font-medium">
             {connector.name === "Injected" ? "MetaMask" : connector.name}
@@ -37,14 +37,14 @@ export function ConnectWalletButton() {
       ))}
 
       {error && (
-        <p className="text-xs text-red-500 text-center">
+        <p className="text-xs text-sell-red text-center">
           {error.message.includes("rejected")
             ? "Connection rejected by user"
             : "Failed to connect. Please try again."}
         </p>
       )}
 
-      <p className="text-xs text-zinc-500 dark:text-zinc-400 text-center">
+      <p className="text-xs text-silver text-center">
         Connect with MetaMask, WalletConnect, or any injected wallet on Polygon.
       </p>
     </div>

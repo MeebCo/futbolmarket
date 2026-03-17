@@ -54,39 +54,39 @@ export function TradeConfirmation({
 
         <div className="space-y-4">
           {/* Order details */}
-          <div className="rounded-lg bg-zinc-50 dark:bg-zinc-900 p-4 space-y-2">
+          <div className="rounded-lg bg-surface p-4 space-y-2">
             <div className="flex justify-between text-sm">
-              <span className="text-zinc-500">Action</span>
+              <span className="text-silver">Action</span>
               <span
-                className={`font-semibold ${isBuy ? "text-emerald-600" : "text-red-500"}`}
+                className={`font-semibold ${isBuy ? "text-buy-green" : "text-sell-red"}`}
               >
                 {side} {outcome}
               </span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-zinc-500">Price</span>
+              <span className="text-silver">Price</span>
               <span className="font-medium">{formatPercent(price)}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-zinc-500">Amount</span>
+              <span className="text-silver">Amount</span>
               <span className="font-medium">{formatUsd(amount)}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-zinc-500">Shares</span>
+              <span className="text-silver">Shares</span>
               <span className="font-medium tabular-nums">
                 {shares.toFixed(2)}
               </span>
             </div>
-            <div className="flex justify-between text-sm border-t border-zinc-200 dark:border-zinc-700 pt-2">
-              <span className="text-zinc-500">Potential Payout</span>
-              <span className="font-semibold text-emerald-600">
+            <div className="flex justify-between text-sm border-t border-border pt-2">
+              <span className="text-silver">Potential Payout</span>
+              <span className="font-semibold text-buy-green">
                 {formatUsd(potentialPayout)}
               </span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-zinc-500">Potential Profit</span>
+              <span className="text-silver">Potential Profit</span>
               <span
-                className={`font-semibold ${potentialProfit >= 0 ? "text-emerald-600" : "text-red-500"}`}
+                className={`font-semibold ${potentialProfit >= 0 ? "text-buy-green" : "text-sell-red"}`}
               >
                 {potentialProfit >= 0 ? "+" : ""}
                 {formatUsd(potentialProfit)}
@@ -95,7 +95,7 @@ export function TradeConfirmation({
           </div>
 
           {/* Warning */}
-          <div className="flex items-start gap-2 rounded-lg bg-amber-50 dark:bg-amber-900/20 p-3 text-xs text-amber-800 dark:text-amber-200">
+          <div className="flex items-start gap-2 rounded-lg bg-amber/10 p-3 text-xs text-amber">
             <AlertTriangle className="h-4 w-4 flex-shrink-0 mt-0.5" />
             <p>
               This is a limit order. It will be placed on the orderbook and

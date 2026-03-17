@@ -27,12 +27,12 @@ export function PositionsList({ positions, isLoading }: PositionsListProps) {
   if (positions.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center">
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">
+        <p className="text-sm text-silver">
           No open positions. Browse markets to start trading.
         </p>
         <Link
           href="/markets"
-          className="mt-2 text-sm text-emerald-600 hover:underline"
+          className="mt-2 text-sm text-purple hover:underline"
         >
           Browse Markets
         </Link>
@@ -62,7 +62,7 @@ export function PositionsList({ positions, isLoading }: PositionsListProps) {
                       >
                         {pos.outcome}
                       </Badge>
-                      <span className="text-xs text-zinc-500">
+                      <span className="text-xs text-silver">
                         {pos.size} shares @ {formatPercent(parseFloat(pos.avgPrice))}
                       </span>
                     </div>
@@ -72,7 +72,7 @@ export function PositionsList({ positions, isLoading }: PositionsListProps) {
                       {formatUsd(pos.currentPrice * parseFloat(pos.size))}
                     </p>
                     <div
-                      className={`flex items-center justify-end gap-0.5 text-xs ${isProfitable ? "text-emerald-600" : "text-red-500"}`}
+                      className={`flex items-center justify-end gap-0.5 text-xs ${isProfitable ? "text-buy-green" : "text-sell-red"}`}
                     >
                       {isProfitable ? (
                         <TrendingUp className="h-3 w-3" />

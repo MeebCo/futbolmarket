@@ -45,7 +45,7 @@ export function OpenOrdersList({
   if (orders.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center">
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">
+        <p className="text-sm text-silver">
           No open orders.
         </p>
       </div>
@@ -55,7 +55,7 @@ export function OpenOrdersList({
   return (
     <div className="space-y-2">
       {/* Header */}
-      <div className="grid grid-cols-6 gap-2 px-4 text-[10px] font-medium text-zinc-500 uppercase">
+      <div className="grid grid-cols-6 gap-2 px-4 text-[10px] font-medium text-silver uppercase">
         <span className="col-span-2">Market</span>
         <span>Side</span>
         <span>Price</span>
@@ -80,7 +80,7 @@ export function OpenOrdersList({
                   <p className="text-xs font-medium truncate">
                     {order.marketQuestion || order.market}
                   </p>
-                  <p className="text-[10px] text-zinc-500">
+                  <p className="text-[10px] text-silver">
                     {timeAgo(order.created_at)}
                   </p>
                 </div>
@@ -100,7 +100,7 @@ export function OpenOrdersList({
                     {formatUsd(parseFloat(order.original_size))}
                   </span>
                   {fillPercent > 0 && (
-                    <p className="text-[10px] text-emerald-600">
+                    <p className="text-[10px] text-buy-green">
                       {fillPercent.toFixed(0)}% filled
                     </p>
                   )}

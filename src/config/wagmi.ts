@@ -13,7 +13,7 @@ export const wagmiConfig = createConfig({
           walletConnect({
             projectId,
             metadata: {
-              name: "FutbolMarket",
+              name: "Meebits Fútbol",
               description: "World Cup 2026 Prediction Markets",
               url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
               icons: [],

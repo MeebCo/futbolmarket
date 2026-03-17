@@ -13,9 +13,9 @@ export default function MarketDetailError({
 }) {
   return (
     <div className="mx-auto max-w-7xl px-4 py-16 text-center">
-      <AlertTriangle className="mx-auto h-12 w-12 text-red-500 mb-4" />
+      <AlertTriangle className="mx-auto h-12 w-12 text-sell-red mb-4" />
       <h2 className="text-xl font-bold">Failed to load market</h2>
-      <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400 max-w-md mx-auto">
+      <p className="mt-2 text-sm text-silver max-w-md mx-auto">
         {error.message || "We couldn't load this market. It may not exist or there may be a network issue."}
       </p>
       <div className="mt-6 flex items-center justify-center gap-3">

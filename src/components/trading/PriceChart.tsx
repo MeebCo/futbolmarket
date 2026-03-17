@@ -26,18 +26,18 @@ function formatTimestamp(t: number): string {
 export function PriceChart({ data, isLoading }: PriceChartProps) {
   if (isLoading) {
     return (
-      <div className="rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950">
+      <div className="rounded-xl border border-border bg-card p-4">
         <h3 className="text-sm font-semibold mb-3">Price History</h3>
-        <div className="h-48 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
+        <div className="h-48 animate-pulse rounded bg-surface" />
       </div>
     );
   }
 
   if (!data || data.length === 0) {
     return (
-      <div className="rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950">
+      <div className="rounded-xl border border-border bg-card p-4">
         <h3 className="text-sm font-semibold mb-3">Price History</h3>
-        <div className="flex h-48 items-center justify-center text-sm text-zinc-500">
+        <div className="flex h-48 items-center justify-center text-sm text-silver">
           No price history available
         </div>
       </div>
@@ -54,11 +54,11 @@ export function PriceChart({ data, isLoading }: PriceChartProps) {
   const isPositive = currentPrice >= startPrice;
 
   return (
-    <div className="rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950">
+    <div className="rounded-xl border border-border bg-card p-4">
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-sm font-semibold">Price History</h3>
         <span
-          className={`text-sm font-medium ${isPositive ? "text-emerald-600" : "text-red-500"}`}
+          className={`text-sm font-medium ${isPositive ? "text-buy-green" : "text-sell-red"}`}
         >
           {currentPrice.toFixed(1)}¢
         </span>
@@ -70,32 +70,32 @@ export function PriceChart({ data, isLoading }: PriceChartProps) {
               <linearGradient id="priceGradient" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="5%"
-                  stopColor={isPositive ? "#10b981" : "#ef4444"}
+                  stopColor={isPositive ? "#34D399" : "#F87171"}
                   stopOpacity={0.3}
                 />
                 <stop
                   offset="95%"
-                  stopColor={isPositive ? "#10b981" : "#ef4444"}
+                  stopColor={isPositive ? "#34D399" : "#F87171"}
                   stopOpacity={0}
                 />
               </linearGradient>
             </defs>
             <CartesianGrid
               strokeDasharray="3 3"
-              stroke="#e4e4e7"
+              stroke="#1e1050"
               vertical={false}
             />
             <XAxis
               dataKey="time"
               tickFormatter={formatTimestamp}
-              tick={{ fontSize: 10, fill: "#a1a1aa" }}
+              tick={{ fontSize: 10, fill: "#94A3B8" }}
               axisLine={false}
               tickLine={false}
               minTickGap={40}
             />
             <YAxis
               tickFormatter={(v: number) => `${v.toFixed(0)}¢`}
-              tick={{ fontSize: 10, fill: "#a1a1aa" }}
+              tick={{ fontSize: 10, fill: "#94A3B8" }}
               axisLine={false}
               tickLine={false}
               domain={["auto", "auto"]}
@@ -103,11 +103,11 @@ export function PriceChart({ data, isLoading }: PriceChartProps) {
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: "#18181b",
-                border: "none",
+                backgroundColor: "#0D0535",
+                border: "1px solid #1e1050",
                 borderRadius: "8px",
                 fontSize: "12px",
-                color: "#fafafa",
+                color: "#F8F7FF",
               }}
               formatter={(value) => [
                 `${Number(value ?? 0).toFixed(1)}¢`,
@@ -120,7 +120,7 @@ export function PriceChart({ data, isLoading }: PriceChartProps) {
             <Area
               type="monotone"
               dataKey="price"
-              stroke={isPositive ? "#10b981" : "#ef4444"}
+              stroke={isPositive ? "#34D399" : "#F87171"}
               strokeWidth={2}
               fill="url(#priceGradient)"
             />

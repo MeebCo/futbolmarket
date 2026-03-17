@@ -106,7 +106,15 @@ export interface Tag {
   forceShow: boolean;
 }
 
-export type MarketCategory = "winner" | "group" | "qualification" | "other";
+export type MarketCategory =
+  | "winner"
+  | "group"
+  | "qualification"
+  | "cl-winner"
+  | "cl-match"
+  | "cl-knockout"
+  | "cl-stats"
+  | "other";
 
 // Simplified types for UI consumption
 export interface MarketSummary {
@@ -137,6 +145,7 @@ export interface MarketSummary {
   orderMinSize: number;
   acceptingOrders: boolean;
   marketCategory: MarketCategory;
+  competition: "worldcup" | "championsleague" | "other";
 }
 
 export interface MarketDetail extends MarketSummary {

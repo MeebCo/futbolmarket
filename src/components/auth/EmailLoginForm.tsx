@@ -58,11 +58,11 @@ export function EmailLoginForm() {
   if (sent && isLoading) {
     return (
       <div className="flex flex-col items-center gap-3 py-6">
-        <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
-        <p className="text-sm text-zinc-600 dark:text-zinc-400">
+        <Loader2 className="h-8 w-8 animate-spin text-purple" />
+        <p className="text-sm text-silver">
           Check your email for a login code...
         </p>
-        <p className="text-xs text-zinc-500">{email}</p>
+        <p className="text-xs text-silver">{email}</p>
       </div>
     );
   }
@@ -72,12 +72,12 @@ export function EmailLoginForm() {
       <div>
         <label
           htmlFor="email"
-          className="text-xs font-medium text-zinc-500 dark:text-zinc-400"
+          className="text-xs font-medium text-silver"
         >
           Email address
         </label>
         <div className="relative mt-1">
-          <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+          <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-silver" />
           <Input
             id="email"
             type="email"
@@ -98,9 +98,9 @@ export function EmailLoginForm() {
         )}
       </Button>
 
-      {error && <p className="text-xs text-red-500 text-center">{error}</p>}
+      {error && <p className="text-xs text-sell-red text-center">{error}</p>}
 
-      <p className="text-xs text-zinc-500 dark:text-zinc-400 text-center">
+      <p className="text-xs text-silver text-center">
         We&apos;ll send a one-time code to your email. No password needed.
       </p>
     </form>

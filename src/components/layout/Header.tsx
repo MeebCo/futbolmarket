@@ -11,13 +11,13 @@ export function Header() {
     useWallet();
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-zinc-200 bg-white/80 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-950/80">
+    <header className="sticky top-0 z-40 w-full border-b border-border bg-background/80 backdrop-blur-md">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <Trophy className="h-6 w-6 text-emerald-600" />
+          <Trophy className="h-6 w-6 text-purple" />
           <span className="text-lg font-bold">
-            Futbol<span className="text-emerald-600">Market</span>
+            Meebits <span className="text-purple">Fútbol</span>
           </span>
         </Link>
 
@@ -25,14 +25,14 @@ export function Header() {
         <nav className="hidden items-center gap-6 md:flex">
           <Link
             href="/markets"
-            className="text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors"
+            className="text-sm font-medium text-silver hover:text-foreground transition-colors"
           >
             Markets
           </Link>
           {isConnected && (
             <Link
               href="/portfolio"
-              className="text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors"
+              className="text-sm font-medium text-silver hover:text-foreground transition-colors"
             >
               Portfolio
             </Link>
@@ -43,13 +43,13 @@ export function Header() {
         <div className="flex items-center gap-3">
           {isConnected ? (
             <div className="flex items-center gap-2">
-              <div className="hidden sm:flex items-center gap-1.5 rounded-lg bg-zinc-100 px-3 py-1.5 text-sm dark:bg-zinc-800">
-                <Wallet className="h-3.5 w-3.5 text-emerald-600" />
+              <div className="hidden sm:flex items-center gap-1.5 rounded-lg bg-surface px-3 py-1.5 text-sm">
+                <Wallet className="h-3.5 w-3.5 text-purple" />
                 <span className="font-medium tabular-nums">
                   {eoaAddress ? shortenAddress(eoaAddress) : "Connected"}
                 </span>
                 {authMethod && (
-                  <span className="text-[10px] text-zinc-500">
+                  <span className="text-[10px] text-silver">
                     ({authMethod})
                   </span>
                 )}

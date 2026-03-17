@@ -10,17 +10,17 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-emerald-600 text-white hover:bg-emerald-700",
-        destructive: "bg-red-600 text-white hover:bg-red-700",
+        default: "bg-purple text-white hover:bg-purple-dark",
+        destructive: "bg-sell-red text-white hover:bg-sell-red-dark",
         outline:
-          "border border-zinc-300 bg-transparent hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800",
+          "border border-border bg-transparent hover:bg-surface",
         secondary:
-          "bg-zinc-200 text-zinc-900 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-100 dark:hover:bg-zinc-600",
+          "bg-surface text-foreground hover:bg-card-bg",
         ghost:
-          "hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-100",
-        link: "text-emerald-600 underline-offset-4 hover:underline dark:text-emerald-400",
-        buy: "bg-emerald-600 text-white hover:bg-emerald-700",
-        sell: "bg-red-500 text-white hover:bg-red-600",
+          "hover:bg-surface hover:text-foreground",
+        link: "text-purple underline-offset-4 hover:underline",
+        buy: "bg-buy-green text-white hover:bg-buy-green-dark",
+        sell: "bg-sell-red text-white hover:bg-sell-red-dark",
       },
       size: {
         default: "h-10 px-4 py-2",

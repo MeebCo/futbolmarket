@@ -8,6 +8,7 @@ import {
   type SortOption,
   type CategoryFilter,
   type CategoryCounts,
+  type CompetitionFilter,
 } from "@/components/markets/MarketFilters";
 import type { MarketSummary, MarketCategory } from "@/lib/polymarket/types";
 import { Trophy } from "lucide-react";
@@ -23,6 +24,10 @@ const CATEGORY_ORDER: MarketCategory[] = [
   "winner",
   "group",
   "qualification",
+  "cl-winner",
+  "cl-match",
+  "cl-knockout",
+  "cl-stats",
   "other",
 ];
 
@@ -50,12 +55,26 @@ function sortMarkets(markets: MarketSummary[], sortBy: SortOption): MarketSummar
   return sorted;
 }
 
+const EMPTY_CATEGORY_COUNTS: CategoryCounts = {
+  all: 0,
+  winner: 0,
+  group: 0,
+  qualification: 0,
+  "cl-winner": 0,
+  "cl-match": 0,
+  "cl-knockout": 0,
+  "cl-stats": 0,
+  other: 0,
+};
+
 export default function MarketsPage() {
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<SortOption>("price");
   const [showActive, setShowActive] = useState(true);
   const [selectedCategory, setSelectedCategory] =
     useState<CategoryFilter>("all");
+  const [selectedCompetition, setSelectedCompetition] =
+    useState<CompetitionFilter>("all");
 
   const { data: markets = [], isLoading } = useQuery({
     queryKey: ["markets"],
@@ -63,7 +82,7 @@ export default function MarketsPage() {
     refetchInterval: 30000,
   });
 
-  // Apply search + active filters (shared across all views)
+  // Apply search + active filters
   const baseFiltered = useMemo(() => {
     let filtered = [...markets];
     if (search) {
@@ -78,58 +97,75 @@ export default function MarketsPage() {
     return filtered;
   }, [markets, search, showActive]);
 
-  // Category counts (computed from filtered, before category selection)
-  const categoryCounts: CategoryCounts = useMemo(() => {
-    const counts: CategoryCounts = {
+  // Competition counts (before competition filter)
+  const competitionCounts = useMemo(() => {
+    const counts: Record<CompetitionFilter, number> = {
       all: baseFiltered.length,
-      winner: 0,
-      group: 0,
-      qualification: 0,
-      other: 0,
+      worldcup: 0,
+      championsleague: 0,
     };
     for (const m of baseFiltered) {
-      counts[m.marketCategory]++;
+      if (m.competition === "worldcup") counts.worldcup++;
+      else if (m.competition === "championsleague") counts.championsleague++;
     }
     return counts;
   }, [baseFiltered]);
 
+  // Filter by competition
+  const competitionFiltered = useMemo(() => {
+    if (selectedCompetition === "all") return baseFiltered;
+    return baseFiltered.filter((m) => m.competition === selectedCompetition);
+  }, [baseFiltered, selectedCompetition]);
+
+  // Category counts (after competition filter)
+  const categoryCounts: CategoryCounts = useMemo(() => {
+    const counts = { ...EMPTY_CATEGORY_COUNTS };
+    counts.all = competitionFiltered.length;
+    for (const m of competitionFiltered) {
+      if (m.marketCategory in counts) {
+        counts[m.marketCategory as keyof CategoryCounts]++;
+      }
+    }
+    return counts;
+  }, [competitionFiltered]);
+
   // Markets grouped by category (for "all" view)
   const marketsByCategory = useMemo(() => {
-    const groups: Record<MarketCategory, MarketSummary[]> = {
-      winner: [],
-      group: [],
-      qualification: [],
-      other: [],
-    };
-    for (const m of baseFiltered) {
-      groups[m.marketCategory].push(m);
+    const groups = Object.fromEntries(
+      CATEGORY_ORDER.map((cat) => [cat, [] as MarketSummary[]])
+    ) as Record<MarketCategory, MarketSummary[]>;
+
+    for (const m of competitionFiltered) {
+      if (groups[m.marketCategory]) {
+        groups[m.marketCategory].push(m);
+      }
     }
-    // Sort each group
     for (const cat of CATEGORY_ORDER) {
       groups[cat] = sortMarkets(groups[cat], sortBy);
     }
     return groups;
-  }, [baseFiltered, sortBy]);
+  }, [competitionFiltered, sortBy]);
 
   // Flat sorted list for single-category view
   const flatMarkets = useMemo(() => {
     if (selectedCategory === "all") return [];
-    const filtered = baseFiltered.filter(
+    const filtered = competitionFiltered.filter(
       (m) => m.marketCategory === selectedCategory
     );
     return sortMarkets(filtered, sortBy);
-  }, [baseFiltered, selectedCategory, sortBy]);
+  }, [competitionFiltered, selectedCategory, sortBy]);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
-          <Trophy className="h-7 w-7 text-emerald-600" />
-          <h1 className="text-2xl font-bold">World Cup 2026 Markets</h1>
+          <Trophy className="h-7 w-7 text-purple" />
+          <h1 className="text-2xl font-bold">Football Markets</h1>
         </div>
-        <p className="text-zinc-600 dark:text-zinc-400">
-          Browse and trade prediction markets for the FIFA World Cup 2026.
+        <p className="text-silver">
+          Browse and trade prediction markets for the World Cup 2026 and
+          Champions League.
         </p>
       </div>
 
@@ -145,14 +181,17 @@ export default function MarketsPage() {
           selectedCategory={selectedCategory}
           onCategoryChange={setSelectedCategory}
           categoryCounts={categoryCounts}
+          selectedCompetition={selectedCompetition}
+          onCompetitionChange={setSelectedCompetition}
+          competitionCounts={competitionCounts}
         />
       </div>
 
       {/* Results count */}
       {!isLoading && (
-        <p className="mb-4 text-sm text-zinc-500 dark:text-zinc-400">
+        <p className="mb-4 text-sm text-silver">
           {selectedCategory === "all"
-            ? `${baseFiltered.length} market${baseFiltered.length !== 1 ? "s" : ""}`
+            ? `${competitionFiltered.length} market${competitionFiltered.length !== 1 ? "s" : ""}`
             : `${flatMarkets.length} market${flatMarkets.length !== 1 ? "s" : ""}`}
         </p>
       )}

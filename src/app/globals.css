@@ -1,10 +1,5 @@
 @import "tailwindcss";
 
-:root {
-  --background: #fafafa;
-  --foreground: #0a0a0a;
-}
-
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -27,21 +22,104 @@
       transform: scale(0.95);
     }
   }
+
+  /* Meebits purple palette */
+  --color-purple: #6366F1;
+  --color-purple-dark: #4F46E5;
+  --color-purple-light: #8B5CF6;
+  --color-purple-tint: #818CF8;
+  --color-surface: #0D0535;
+  --color-card-bg: #120844;
+  --color-buy-green: #34D399;
+  --color-buy-green-dark: #059669;
+  --color-sell-red: #F87171;
+  --color-sell-red-dark: #DC2626;
+  --color-silver: #94A3B8;
+  --color-silver-dark: #64748B;
+  --color-amber: #FBBF24;
+
+  /* Semantic color tokens */
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-destructive: var(--destructive);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #fafafa;
+/* Dark-only Meebits theme */
+:root {
+  --radius: 0.5rem;
+  --background: #06001E;
+  --foreground: #F8F7FF;
+  --card: #120844;
+  --card-foreground: #F8F7FF;
+  --popover: #0D0535;
+  --popover-foreground: #F8F7FF;
+  --primary: #6366F1;
+  --primary-foreground: #FFFFFF;
+  --secondary: #0D0535;
+  --secondary-foreground: #F8F7FF;
+  --muted: #0D0535;
+  --muted-foreground: #94A3B8;
+  --accent: #1e1050;
+  --accent-foreground: #F8F7FF;
+  --destructive: #F87171;
+  --border: #1e1050;
+  --input: #0D0535;
+  --ring: #6366F1;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
+/* Purple gradient utilities */
+.purple-gradient {
+  background: linear-gradient(135deg, #06001E 0%, #0D0535 50%, #120844 100%);
+}
+
+.brand-gradient {
+  background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 50%, #6366F1 100%);
 }
 
 /* Tabular nums for financial data */
 .tabular-nums {
   font-variant-numeric: tabular-nums;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #1e1050;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2d1a70;
 }

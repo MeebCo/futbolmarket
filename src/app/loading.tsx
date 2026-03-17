@@ -8,7 +8,7 @@ export default function Loading() {
         {Array.from({ length: 6 }).map((_, i) => (
           <div
             key={i}
-            className="rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950"
+            className="rounded-xl border border-border bg-card p-4"
           >
             <div className="flex items-start gap-3">
               <Skeleton className="h-12 w-12 rounded-lg" />

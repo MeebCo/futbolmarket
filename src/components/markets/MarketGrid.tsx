@@ -19,12 +19,16 @@ const CATEGORY_ORDER: MarketCategory[] = [
   "winner",
   "group",
   "qualification",
+  "cl-winner",
+  "cl-match",
+  "cl-knockout",
+  "cl-stats",
   "other",
 ];
 
 function MarketCardSkeleton() {
   return (
-    <div className="rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950">
+    <div className="rounded-xl border border-border bg-card p-4">
       <div className="flex items-start gap-3">
         <Skeleton className="h-12 w-12 rounded-lg" />
         <div className="flex-1 space-y-2">
@@ -60,11 +64,11 @@ function LoadingSkeleton() {
 function EmptyState() {
   return (
     <div className="flex flex-col items-center justify-center py-16 text-center">
-      <p className="text-lg font-medium text-zinc-600 dark:text-zinc-400">
+      <p className="text-lg font-medium text-silver">
         No markets found
       </p>
-      <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-500">
-        World Cup 2026 markets will appear here as they become available on
+      <p className="mt-1 text-sm text-silver">
+        Markets will appear here as they become available on
         Polymarket.
       </p>
     </div>

@@ -20,7 +20,7 @@ export function MarketCard({ market }: MarketCardProps) {
 
   return (
     <Link href={`/markets/${market.slug}`}>
-      <Card className="group h-full transition-all hover:shadow-md hover:border-emerald-300 dark:hover:border-emerald-700 cursor-pointer">
+      <Card className="group h-full transition-all hover:shadow-md hover:border-purple/50 cursor-pointer">
         <CardHeader className="pb-2">
           <div className="flex items-start gap-3">
             {market.image && (
@@ -35,7 +35,7 @@ export function MarketCard({ market }: MarketCardProps) {
               </div>
             )}
             <div className="flex-1 min-w-0">
-              <h3 className="text-sm font-semibold leading-tight line-clamp-2 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+              <h3 className="text-sm font-semibold leading-tight line-clamp-2 group-hover:text-purple transition-colors">
                 {market.question}
               </h3>
             </div>
@@ -46,18 +46,18 @@ export function MarketCard({ market }: MarketCardProps) {
             {/* Price display */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
+                <span className="text-2xl font-bold text-buy-green">
                   {formatPercent(yesPrice)}
                 </span>
-                <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                <span className="text-xs text-silver">
                   Yes
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-lg font-semibold text-red-500">
+                <span className="text-lg font-semibold text-sell-red">
                   {formatPercent(noPrice)}
                 </span>
-                <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                <span className="text-xs text-silver">
                   No
                 </span>
               </div>
@@ -66,7 +66,7 @@ export function MarketCard({ market }: MarketCardProps) {
             {/* Change indicator */}
             {priceChange !== 0 && (
               <div
-                className={`flex items-center gap-1 text-xs ${isUp ? "text-emerald-600" : "text-red-500"}`}
+                className={`flex items-center gap-1 text-xs ${isUp ? "text-buy-green" : "text-sell-red"}`}
               >
                 {isUp ? (
                   <TrendingUp className="h-3 w-3" />
@@ -81,8 +81,8 @@ export function MarketCard({ market }: MarketCardProps) {
             )}
 
             {/* Stats */}
-            <div className="flex items-center justify-between pt-2 border-t border-zinc-100 dark:border-zinc-800">
-              <div className="flex items-center gap-1 text-xs text-zinc-500 dark:text-zinc-400">
+            <div className="flex items-center justify-between pt-2 border-t border-border">
+              <div className="flex items-center gap-1 text-xs text-silver">
                 <BarChart3 className="h-3 w-3" />
                 <span>{formatCompactNumber(market.volume)} vol</span>
               </div>

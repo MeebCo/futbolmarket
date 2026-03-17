@@ -1,18 +1,60 @@
 import { ENDPOINTS } from "./contracts";
-import { WORLD_CUP_EVENT_SLUGS, WORLD_CUP_KEYWORDS } from "@/config/site";
-import type { GammaEvent, GammaMarket, MarketCategory, MarketSummary } from "./types";
+import {
+  WORLD_CUP_EVENT_SLUGS,
+  WORLD_CUP_KEYWORDS,
+  CHAMPIONS_LEAGUE_EVENT_SLUGS,
+  CHAMPIONS_LEAGUE_KEYWORDS,
+} from "@/config/site";
+import type {
+  GammaEvent,
+  GammaMarket,
+  MarketCategory,
+  MarketSummary,
+} from "./types";
 
 const GAMMA_API = ENDPOINTS.GAMMA;
 
-export function categorizeMarket(question: string): MarketCategory {
+// ── Categorization ────────────────────────────────────────────
+
+export function categorizeMarket(
+  question: string,
+  eventSlug: string
+): { category: MarketCategory; competition: MarketSummary["competition"] } {
   const q = question.toLowerCase();
-  if (q.includes("win group") && q.includes("world cup")) return "group";
-  if (q.includes("win") && q.includes("world cup")) return "winner";
-  if (q.includes("qualify")) return "qualification";
-  return "other";
+  const s = eventSlug.toLowerCase();
+
+  // Champions League detection (word-boundary check for "ucl" to avoid matching "nuclear" etc.)
+  const isCL =
+    s.startsWith("ucl-") ||
+    s.includes("champions-league") ||
+    q.includes("champions league") ||
+    /\bucl\b/.test(q);
+
+  if (isCL) {
+    // CL match markets (slug pattern: ucl-{team}-{team}-{date})
+    if (s.match(/^ucl-[a-z]+-[a-z]+-\d{4}-\d{2}-\d{2}/)) return { category: "cl-match", competition: "championsleague" };
+    // CL knockout (quarter-finals, semi-finals, etc.)
+    if (q.includes("quarter") || q.includes("semi") || q.includes("final") || q.includes("reach")) return { category: "cl-knockout", competition: "championsleague" };
+    // CL stats (top scorer, assists, clean sheets)
+    if (q.includes("scorer") || q.includes("assist") || q.includes("clean sheet") || q.includes("goal")) return { category: "cl-stats", competition: "championsleague" };
+    // CL winner
+    if (q.includes("win") || s.includes("winner")) return { category: "cl-winner", competition: "championsleague" };
+    // Default CL
+    return { category: "cl-winner", competition: "championsleague" };
+  }
+
+  // World Cup detection
+  if (q.includes("win group") && q.includes("world cup")) return { category: "group", competition: "worldcup" };
+  if (q.includes("win") && q.includes("world cup")) return { category: "winner", competition: "worldcup" };
+  if (q.includes("qualify")) return { category: "qualification", competition: "worldcup" };
+  if (q.includes("world cup") || q.includes("fifa")) return { category: "other", competition: "worldcup" };
+
+  return { category: "other", competition: "other" };
 }
 
-function parseMarket(m: GammaMarket): MarketSummary {
+// ── Parsing ───────────────────────────────────────────────────
+
+function parseMarket(m: GammaMarket, eventSlug: string = ""): MarketSummary {
   let outcomes: string[] = [];
   let outcomePrices: number[] = [];
   let clobTokenIds: string[] = [];
@@ -32,6 +74,8 @@ function parseMarket(m: GammaMarket): MarketSummary {
   } catch {
     clobTokenIds = [];
   }
+
+  const { category, competition } = categorizeMarket(m.question, eventSlug);
 
   return {
     conditionId: m.conditionId,
@@ -60,36 +104,57 @@ function parseMarket(m: GammaMarket): MarketSummary {
     orderPriceMinTickSize: parseFloat(m.orderPriceMinTickSize || "0.01"),
     orderMinSize: parseFloat(m.orderMinSize || "5"),
     acceptingOrders: m.acceptingOrders,
-    marketCategory: categorizeMarket(m.question),
+    marketCategory: category,
+    competition,
   };
 }
 
-/** Check if text matches any World Cup keyword */
-function isWorldCupRelated(text: string): boolean {
-  const lower = text.toLowerCase();
-  return WORLD_CUP_KEYWORDS.some((kw) => lower.includes(kw));
-}
+// ── Event fetching ────────────────────────────────────────────
 
-/**
- * Fetch World Cup events by their known slugs.
- * This is the primary, reliable method.
- */
-async function fetchEventsBySlug(): Promise<GammaEvent[]> {
-  const queries = WORLD_CUP_EVENT_SLUGS.map((slug) =>
+/** Fetch events by their known slugs (reliable primary method) */
+async function fetchEventsBySlugs(slugs: readonly string[]): Promise<GammaEvent[]> {
+  const queries = slugs.map((slug) =>
     fetch(`${GAMMA_API}/events?slug=${slug}&limit=1`)
       .then((r) => r.json())
       .then((data: GammaEvent[]) => (Array.isArray(data) ? data : []))
       .catch(() => [] as GammaEvent[])
   );
-
   const results = await Promise.all(queries);
   return results.flat();
 }
 
-/**
- * Discover additional World Cup events by scanning recent active events
- * and filtering by title/description keywords.
- */
+/** Discover CL match events by scanning active events for ucl- slug pattern */
+async function discoverCLMatchEvents(): Promise<GammaEvent[]> {
+  const allEvents: GammaEvent[] = [];
+  // Paginate through active events to find UCL matches
+  for (let offset = 0; offset < 400; offset += 100) {
+    try {
+      const res = await fetch(
+        `${GAMMA_API}/events?active=true&closed=false&limit=100&offset=${offset}`
+      );
+      const data: GammaEvent[] = await res.json();
+      if (!Array.isArray(data) || data.length === 0) break;
+
+      const clEvents = data.filter((e) => {
+        const slug = (e.slug || "").toLowerCase();
+        const title = (e.title || "").toLowerCase();
+        return (
+          slug.startsWith("ucl-") ||
+          slug.includes("champions-league") ||
+          title.includes("champions league") ||
+          title.includes("uefa champions") ||
+          /\bucl\b/.test(title)
+        );
+      });
+      allEvents.push(...clEvents);
+    } catch {
+      break;
+    }
+  }
+  return allEvents;
+}
+
+/** Discover World Cup events by keyword matching */
 async function discoverWorldCupEvents(): Promise<GammaEvent[]> {
   try {
     const res = await fetch(
@@ -98,24 +163,52 @@ async function discoverWorldCupEvents(): Promise<GammaEvent[]> {
     const data: GammaEvent[] = await res.json();
     if (!Array.isArray(data)) return [];
 
-    return data.filter(
-      (e) =>
-        isWorldCupRelated(e.title || "") ||
-        isWorldCupRelated(e.description || "")
-    );
+    return data.filter((e) => {
+      const title = (e.title || "").toLowerCase();
+      const desc = (e.description || "").toLowerCase();
+      return WORLD_CUP_KEYWORDS.some(
+        (kw) => title.includes(kw) || desc.includes(kw)
+      );
+    });
   } catch {
     return [];
   }
 }
 
+// ── Public API ────────────────────────────────────────────────
+
+/** Fetch all events for all competitions */
+export async function fetchAllEvents(): Promise<GammaEvent[]> {
+  const [wcSlugEvents, wcDiscovered, clSlugEvents, clMatchEvents] =
+    await Promise.all([
+      fetchEventsBySlugs(WORLD_CUP_EVENT_SLUGS),
+      discoverWorldCupEvents(),
+      fetchEventsBySlugs(CHAMPIONS_LEAGUE_EVENT_SLUGS),
+      discoverCLMatchEvents(),
+    ]);
+
+  // Merge and deduplicate by event ID
+  const all = [
+    ...wcSlugEvents,
+    ...wcDiscovered,
+    ...clSlugEvents,
+    ...clMatchEvents,
+  ];
+  const seen = new Set<string>();
+  return all.filter((e) => {
+    if (seen.has(e.id)) return false;
+    seen.add(e.id);
+    return true;
+  });
+}
+
+/** Backward-compatible: fetch World Cup events only */
 export async function fetchWorldCupEvents(): Promise<GammaEvent[]> {
-  // Fetch by known slugs + discover new ones in parallel
   const [slugEvents, discoveredEvents] = await Promise.all([
-    fetchEventsBySlug(),
+    fetchEventsBySlugs(WORLD_CUP_EVENT_SLUGS),
     discoverWorldCupEvents(),
   ]);
 
-  // Merge and deduplicate by event ID
   const all = [...slugEvents, ...discoveredEvents];
   const seen = new Set<string>();
   return all.filter((e) => {
@@ -125,6 +218,28 @@ export async function fetchWorldCupEvents(): Promise<GammaEvent[]> {
   });
 }
 
+/** Fetch all markets across all competitions */
+export async function fetchAllMarkets(): Promise<MarketSummary[]> {
+  const events = await fetchAllEvents();
+  const allMarkets: MarketSummary[] = [];
+  const seen = new Set<string>();
+
+  for (const event of events) {
+    if (event.markets) {
+      for (const m of event.markets) {
+        if (!seen.has(m.conditionId)) {
+          seen.add(m.conditionId);
+          allMarkets.push(parseMarket(m, event.slug));
+        }
+      }
+    }
+  }
+
+  allMarkets.sort((a, b) => b.volume - a.volume);
+  return allMarkets;
+}
+
+/** Backward-compatible: fetch World Cup markets only */
 export async function fetchWorldCupMarkets(): Promise<MarketSummary[]> {
   const events = await fetchWorldCupEvents();
   const allMarkets: MarketSummary[] = [];
@@ -135,15 +250,13 @@ export async function fetchWorldCupMarkets(): Promise<MarketSummary[]> {
       for (const m of event.markets) {
         if (!seen.has(m.conditionId)) {
           seen.add(m.conditionId);
-          allMarkets.push(parseMarket(m));
+          allMarkets.push(parseMarket(m, event.slug));
         }
       }
     }
   }
 
-  // Sort by volume descending
   allMarkets.sort((a, b) => b.volume - a.volume);
-
   return allMarkets;
 }
 

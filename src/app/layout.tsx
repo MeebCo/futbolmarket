@@ -15,13 +15,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "FutbolMarket - World Cup 2026 Prediction Markets",
+  title: "Meebits Fútbol - Football Prediction Markets",
   description:
-    "Trade prediction markets for FIFA World Cup 2026. Buy and sell shares on match outcomes, tournament winners, and more — powered by Polymarket.",
+    "Trade prediction markets for the World Cup 2026 and Champions League. Buy and sell shares on match outcomes, tournament winners, and more — powered by Polymarket.",
   openGraph: {
-    title: "FutbolMarket - World Cup 2026 Prediction Markets",
+    title: "Meebits Fútbol - Football Prediction Markets",
     description:
-      "Trade prediction markets for FIFA World Cup 2026 powered by Polymarket.",
+      "Trade prediction markets for World Cup 2026 and Champions League powered by Polymarket.",
     type: "website",
   },
 };
@@ -32,15 +32,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`}
       >
         <Providers>
           <Header />
           <main className="flex-1">{children}</main>
-          <footer className="border-t border-zinc-200 dark:border-zinc-800 py-6 text-center text-xs text-zinc-500">
-            <p>FutbolMarket - Powered by Polymarket Builder API</p>
+          <footer className="border-t border-border py-6 text-center text-xs text-silver">
+            <p>Meebits Fútbol - Powered by Polymarket Builder API</p>
           </footer>
         </Providers>
       </body>

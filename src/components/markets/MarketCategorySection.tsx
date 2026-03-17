@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { MarketCard } from "./MarketCard";
-import { ChevronDown, ChevronUp, Trophy, Users, Plane, HelpCircle } from "lucide-react";
+import { ChevronDown, ChevronUp, Trophy, Users, Plane, HelpCircle, Swords, BarChart3, Shield } from "lucide-react";
 import type { MarketSummary, MarketCategory } from "@/lib/polymarket/types";
 
 const CATEGORY_CONFIG: Record<
@@ -12,6 +12,10 @@ const CATEGORY_CONFIG: Record<
   winner: { label: "Tournament Winner", icon: Trophy },
   group: { label: "Group Winner", icon: Users },
   qualification: { label: "Qualification", icon: Plane },
+  "cl-winner": { label: "UCL Winner", icon: Trophy },
+  "cl-match": { label: "UCL Matches", icon: Swords },
+  "cl-knockout": { label: "UCL Knockout", icon: Shield },
+  "cl-stats": { label: "UCL Player Stats", icon: BarChart3 },
   other: { label: "Other", icon: HelpCircle },
 };
 
@@ -34,25 +38,25 @@ export function MarketCategorySection({
   const displayed = expanded ? markets : markets.slice(0, PREVIEW_COUNT);
 
   return (
-    <section className="rounded-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden">
+    <section className="rounded-xl border border-border overflow-hidden">
       {/* Header */}
       <button
         onClick={() => setExpanded((v) => !v)}
-        className="flex w-full items-center justify-between px-5 py-3 bg-zinc-50 dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800/60 transition-colors cursor-pointer"
+        className="flex w-full items-center justify-between px-5 py-3 bg-surface hover:bg-card-bg transition-colors cursor-pointer"
       >
         <div className="flex items-center gap-2">
-          <Icon className="h-5 w-5 text-emerald-600" />
+          <Icon className="h-5 w-5 text-purple" />
           <span className="font-semibold text-sm">
             {config.label}
           </span>
-          <span className="text-xs text-zinc-500 dark:text-zinc-400">
+          <span className="text-xs text-silver">
             ({markets.length})
           </span>
         </div>
         {expanded ? (
-          <ChevronUp className="h-4 w-4 text-zinc-400" />
+          <ChevronUp className="h-4 w-4 text-silver" />
         ) : (
-          <ChevronDown className="h-4 w-4 text-zinc-400" />
+          <ChevronDown className="h-4 w-4 text-silver" />
         )}
       </button>
 
@@ -69,7 +73,7 @@ export function MarketCategorySection({
           <div className="mt-4 text-center">
             <button
               onClick={() => setExpanded((v) => !v)}
-              className="text-sm font-medium text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300 transition-colors cursor-pointer"
+              className="text-sm font-medium text-purple hover:text-purple-dark transition-colors cursor-pointer"
             >
               {expanded
                 ? "Show less"

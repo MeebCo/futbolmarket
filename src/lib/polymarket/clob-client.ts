@@ -18,7 +18,7 @@ interface CreateClobClientOptions {
 }
 
 /**
- * Create a ClobClient configured for the FutbolMarket builder integration.
+ * Create a ClobClient configured for the Meebits Fútbol builder integration.
  * Runs client-side with remote builder signing (credentials stay server-side).
  */
 export function createClobClient(options: CreateClobClientOptions): ClobClient {
