@@ -4,6 +4,10 @@ export const siteConfig = {
   url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
 } as const;
 
+/** When true, hides trading/sign-in UI and shows odds only. Set via NEXT_PUBLIC_VIEW_ONLY=true */
+export const VIEW_ONLY =
+  process.env.NEXT_PUBLIC_VIEW_ONLY === "true";
+
 // ── Competition type ──────────────────────────────────────────
 export type Competition = "worldcup" | "championsleague";
 

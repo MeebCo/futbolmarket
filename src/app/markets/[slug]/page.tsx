@@ -13,7 +13,8 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatCompactNumber, formatPercent } from "@/lib/utils";
 import type { MarketSummary, OrderBookData, PriceHistoryPoint } from "@/lib/polymarket/types";
-import { ArrowLeft, BarChart3, Clock, Droplets } from "lucide-react";
+import { ArrowLeft, BarChart3, Clock, Droplets, Eye } from "lucide-react";
+import { VIEW_ONLY } from "@/config/site";
 
 interface MarketDetailResponse {
   market: MarketSummary;
@@ -149,9 +150,9 @@ export default function MarketDetailPage() {
           <OrderBook data={orderbook ?? null} />
         </div>
 
-        {/* Sidebar - trading */}
+        {/* Sidebar - trading or odds-only message */}
         <div className="space-y-6">
-          {/* Outcome selector */}
+          {/* Outcome selector - always show for odds display */}
           <div className="rounded-xl border border-border bg-card p-4">
             <OutcomeSelector
               outcomes={market.outcomes}
@@ -161,13 +162,25 @@ export default function MarketDetailPage() {
             />
           </div>
 
-          {/* Bet slip */}
-          {selectedOutcome !== null && (
-            <BetSlip
-              market={market}
-              selectedOutcome={selectedOutcome}
-              tokenId={market.clobTokenIds[selectedOutcome] ?? ""}
-            />
+          {/* Bet slip (hidden in view-only) or odds-only message */}
+          {VIEW_ONLY ? (
+            <div className="rounded-xl border border-border bg-card p-4">
+              <div className="flex items-center gap-2 text-sm text-silver">
+                <Eye className="h-4 w-4 text-purple flex-shrink-0" />
+                <p>
+                  Odds for information only. Trading and sign-in are disabled in
+                  this view.
+                </p>
+              </div>
+            </div>
+          ) : (
+            selectedOutcome !== null && (
+              <BetSlip
+                market={market}
+                selectedOutcome={selectedOutcome}
+                tokenId={market.clobTokenIds[selectedOutcome] ?? ""}
+              />
+            )
           )}
 
           {/* Market stats */}

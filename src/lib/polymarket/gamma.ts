@@ -3,7 +3,6 @@ import {
   WORLD_CUP_EVENT_SLUGS,
   WORLD_CUP_KEYWORDS,
   CHAMPIONS_LEAGUE_EVENT_SLUGS,
-  CHAMPIONS_LEAGUE_KEYWORDS,
 } from "@/config/site";
 import type {
   GammaEvent,

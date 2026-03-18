@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { sessionOptions } from "@/lib/session";
-import { ENDPOINTS, POLYGON } from "@/lib/polymarket/contracts";
+import { ENDPOINTS } from "@/lib/polymarket/contracts";
 import type { SessionData } from "@/lib/polymarket/types";
 import { z } from "zod/v4";
 

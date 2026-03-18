@@ -1,0 +1,47 @@
+name: Deploy to Amplify
+
+on:
+  push:
+    branches: [staging, main]
+
+jobs:
+  deploy:
+    name: Deploy ${{ github.ref_name }} → ${{ github.ref_name == 'main' && 'production' || 'staging' }}
+    runs-on: ubuntu-latest
+    # main → production, staging → staging (company naming convention)
+    environment: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION || 'us-east-1' }}
+
+      - name: Resolve Amplify App ID
+        id: amplify
+        run: |
+          # Prefer environment-specific AMPLIFY_APP_ID; fallback to branch-specific variables
+          if [ -n "${{ vars.AMPLIFY_APP_ID }}" ]; then
+            echo "app_id=${{ vars.AMPLIFY_APP_ID }}" >> $GITHUB_OUTPUT
+          elif [ "${{ github.ref_name }}" = "main" ]; then
+            echo "app_id=${{ vars.AMPLIFY_APP_ID_MAIN }}" >> $GITHUB_OUTPUT
+          else
+            echo "app_id=${{ vars.AMPLIFY_APP_ID_STAGING }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Trigger Amplify build
+        run: |
+          aws amplify start-job \
+            --app-id ${{ steps.amplify.outputs.app_id }} \
+            --branch-name ${{ github.ref_name }} \
+            --job-type RELEASE
+
+      - name: Output deployment info
+        run: |
+          echo "Triggered Amplify deployment for branch ${{ github.ref_name }}"
+          echo "Check AWS Amplify console for build status"

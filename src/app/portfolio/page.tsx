@@ -14,7 +14,9 @@ import {
   History,
   Wallet,
   ArrowLeft,
+  Eye,
 } from "lucide-react";
+import { VIEW_ONLY } from "@/config/site";
 
 async function fetchPortfolioData(type: string) {
   const res = await fetch(`/api/polymarket/positions?type=${type}`);
@@ -28,21 +30,21 @@ export default function PortfolioPage() {
   const { data: positionsData, isLoading: positionsLoading } = useQuery({
     queryKey: ["portfolio", "positions"],
     queryFn: () => fetchPortfolioData("positions"),
-    enabled: isConnected,
+    enabled: !VIEW_ONLY && isConnected,
     refetchInterval: 30000,
   });
 
   const { data: ordersData, isLoading: ordersLoading } = useQuery({
     queryKey: ["portfolio", "orders"],
     queryFn: () => fetchPortfolioData("orders"),
-    enabled: isConnected,
+    enabled: !VIEW_ONLY && isConnected,
     refetchInterval: 15000,
   });
 
   const { data: tradesData, isLoading: tradesLoading } = useQuery({
     queryKey: ["portfolio", "trades"],
     queryFn: () => fetchPortfolioData("trades"),
-    enabled: isConnected,
+    enabled: !VIEW_ONLY && isConnected,
   });
 
   const handleCancelOrder = async (orderId: string) => {
@@ -53,6 +55,27 @@ export default function PortfolioPage() {
       alert("Failed to cancel order");
     }
   };
+
+  if (VIEW_ONLY) {
+    return (
+      <div className="mx-auto max-w-7xl px-4 py-16">
+        <div className="flex flex-col items-center justify-center text-center">
+          <Eye className="h-12 w-12 text-silver mb-4" />
+          <h1 className="text-2xl font-bold">View Only Mode</h1>
+          <p className="mt-2 text-silver max-w-md">
+            This is an odds-only view. Portfolio, sign-in, and trading are
+            disabled. Browse markets to see the odds.
+          </p>
+          <Link href="/markets" className="mt-6">
+            <Button size="lg">
+              <ArrowLeft className="h-5 w-5 mr-2" />
+              Browse Markets
+            </Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   if (!isConnected) {
     return (

@@ -11,7 +11,6 @@ import {
 import {
   useAccount,
   useDisconnect,
-  useConnect,
 } from "wagmi";
 import type { AuthMethod } from "@/lib/polymarket/types";
 

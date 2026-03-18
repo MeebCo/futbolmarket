@@ -4,8 +4,9 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useWallet } from "@/providers/WalletProvider";
 import { shortenAddress } from "@/lib/utils";
-import { Wallet, LogOut, ChevronDown, Trophy } from "lucide-react";
+import { Wallet, LogOut, ChevronDown, Trophy, Eye } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
+import { VIEW_ONLY } from "@/config/site";
 
 export function Header() {
   const { isConnected, eoaAddress, authMethod, disconnect, openAuthModal } =
@@ -13,6 +14,12 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border bg-background/80 backdrop-blur-md">
+      {VIEW_ONLY && (
+        <div className="bg-purple/15 text-center py-1.5 text-xs font-medium text-purple-tint">
+          <Eye className="inline h-3 w-3 mr-1" />
+          Odds only — no trading or sign-in
+        </div>
+      )}
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
@@ -30,7 +37,7 @@ export function Header() {
           >
             Markets
           </Link>
-          {isConnected && (
+          {!VIEW_ONLY && isConnected && (
             <Link
               href="/portfolio"
               className="text-sm font-medium text-silver hover:text-foreground transition-colors"
@@ -42,29 +49,30 @@ export function Header() {
 
         {/* Auth */}
         <div className="flex items-center gap-3">
-          {isConnected ? (
-            <div className="flex items-center gap-2">
-              <div className="hidden sm:flex items-center gap-1.5 rounded-lg bg-surface px-3 py-1.5 text-sm">
-                <Wallet className="h-3.5 w-3.5 text-purple" />
-                <span className="font-medium tabular-nums">
-                  {eoaAddress ? shortenAddress(eoaAddress) : "Connected"}
-                </span>
-                {authMethod && (
-                  <span className="text-[10px] text-silver">
-                    ({authMethod})
+          {!VIEW_ONLY &&
+            (isConnected ? (
+              <div className="flex items-center gap-2">
+                <div className="hidden sm:flex items-center gap-1.5 rounded-lg bg-surface px-3 py-1.5 text-sm">
+                  <Wallet className="h-3.5 w-3.5 text-purple" />
+                  <span className="font-medium tabular-nums">
+                    {eoaAddress ? shortenAddress(eoaAddress) : "Connected"}
                   </span>
-                )}
+                  {authMethod && (
+                    <span className="text-[10px] text-silver">
+                      ({authMethod})
+                    </span>
+                  )}
+                </div>
+                <Button variant="ghost" size="icon" onClick={disconnect}>
+                  <LogOut className="h-4 w-4" />
+                </Button>
               </div>
-              <Button variant="ghost" size="icon" onClick={disconnect}>
-                <LogOut className="h-4 w-4" />
+            ) : (
+              <Button onClick={openAuthModal} size="sm">
+                <Wallet className="h-4 w-4" />
+                Connect
               </Button>
-            </div>
-          ) : (
-            <Button onClick={openAuthModal} size="sm">
-              <Wallet className="h-4 w-4" />
-              Connect
-            </Button>
-          )}
+            ))}
 
           <ThemeToggle />
 

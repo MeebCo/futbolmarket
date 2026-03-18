@@ -29,7 +29,7 @@ export function createClobClient(options: CreateClobClientOptions): ClobClient {
   return new ClobClient(
     ENDPOINTS.CLOB,
     POLYGON.chainId,
-    options.signer as unknown as any,
+    options.signer as unknown as any, // eslint-disable-line @typescript-eslint/no-explicit-any -- ethers v5/v6 compatibility
     options.creds,
     SIGNATURE_TYPE,
     options.funderAddress,

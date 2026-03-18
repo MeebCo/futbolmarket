@@ -8,6 +8,7 @@ import { WalletProvider } from "./WalletProvider";
 import { TradingProvider } from "./TradingProvider";
 import { AuthModal } from "@/components/auth/AuthModal";
 import { ToastProvider, ToastViewport } from "@/components/ui/toast";
+import { VIEW_ONLY } from "@/config/site";
 
 export function Providers({ children }: { children: ReactNode }) {
   return (
@@ -18,7 +19,7 @@ export function Providers({ children }: { children: ReactNode }) {
             <TradingProvider>
               <ToastProvider>
                 {children}
-                <AuthModal />
+                {!VIEW_ONLY && <AuthModal />}
                 <ToastViewport />
               </ToastProvider>
             </TradingProvider>

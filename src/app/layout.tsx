@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/providers/Providers";
 import { Header } from "@/components/layout/Header";
+import { VIEW_ONLY } from "@/config/site";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,7 +41,12 @@ export default function RootLayout({
           <Header />
           <main className="flex-1">{children}</main>
           <footer className="border-t border-border py-6 text-center text-xs text-silver">
-            <p>Meebits Fútbol - Powered by Polymarket Builder API</p>
+            <p>
+              Meebits Fútbol -{" "}
+              {VIEW_ONLY
+                ? "Odds only, no trading"
+                : "Powered by Polymarket Builder API"}
+            </p>
           </footer>
         </Providers>
       </body>
