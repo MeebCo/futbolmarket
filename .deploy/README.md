@@ -48,7 +48,7 @@ Use **Settings → Secrets and variables → Actions**.
 
 Configure in **Amplify Console → App settings → Environment variables** per branch:
 
-- `NEXT_PUBLIC_VIEW_ONLY` – `true` for view-only (hides Connect button). **Staging auto-sets this** in `amplify.yml`; override in Console if needed. For production, set here.
+- `NEXT_PUBLIC_VIEW_ONLY` – `true` for view-only (hides Connect button). **Staging auto-sets this** in `amplify.yml` (uses `AWS_BRANCH`); override in Console if needed. For production, set here.
 - `NEXT_PUBLIC_SITE_URL` – e.g. `https://staging.example.com` or `https://example.com`
 - Other vars from `.env.example` as needed
 

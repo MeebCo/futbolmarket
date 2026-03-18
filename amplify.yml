@@ -6,10 +6,10 @@ frontend:
         - npm ci
     build:
       commands:
-        # Set VIEW_ONLY for staging branch (Amplify sets AMPLIFY_BRANCH)
+        # Set VIEW_ONLY for staging branch (Amplify sets AWS_BRANCH)
         # Override in Amplify Console env vars if needed
         - |
-          if [ "$AMPLIFY_BRANCH" = "staging" ]; then
+          if [ "$AWS_BRANCH" = "staging" ]; then
             export NEXT_PUBLIC_VIEW_ONLY=true
           fi
           npm run build
