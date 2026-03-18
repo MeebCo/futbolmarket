@@ -1,4 +1,4 @@
-name: Deploy to ${{ github.ref_name == 'main' && 'Production' || 'Staging' }}
+name: Deploy
 
 on:
   push:
