@@ -6,7 +6,13 @@ frontend:
         - npm ci
     build:
       commands:
-        - npm run build
+        # Set VIEW_ONLY for staging branch (Amplify sets AMPLIFY_BRANCH)
+        # Override in Amplify Console env vars if needed
+        - |
+          if [ "$AMPLIFY_BRANCH" = "staging" ]; then
+            export NEXT_PUBLIC_VIEW_ONLY=true
+          fi
+          npm run build
   artifacts:
     baseDirectory: .next
     files:

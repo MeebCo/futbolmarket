@@ -11,14 +11,13 @@ CI/CD for Meebits Fútbol uses GitHub Actions. Deployments target AWS Amplify, w
 
 ## Pipeline Overview
 
-1. **CI** (`.github/workflows/ci.yml`) – runs on every push and PR to `staging` or `main`:
-   - Lint
-   - Type check
-   - Build
+1. **CI** (`.github/workflows/ci.yml`) – runs on **pull requests** to `staging` or `main`:
+   - Lint, type check, build
 
-2. **Deploy** (`.github/workflows/deploy.yml`) – runs on push to `staging` or `main`:
-   - Triggers an Amplify build via AWS API
-   - Uses environment-specific secrets and variables (staging vs production)
+2. **Deploy to Staging** / **Deploy to Production** (`.github/workflows/deploy.yml`) – runs on **push** to `staging` or `main`:
+   - Lint, type check, build (validation)
+   - Triggers Amplify build via AWS API
+   - One workflow per push; name reflects target (Staging or Production)
 
 ## GitHub Setup
 
@@ -49,9 +48,11 @@ Use **Settings → Secrets and variables → Actions**.
 
 Configure in **Amplify Console → App settings → Environment variables** per branch:
 
-- `NEXT_PUBLIC_VIEW_ONLY` – `true` for view-only, `false` for full trading
+- `NEXT_PUBLIC_VIEW_ONLY` – `true` for view-only (hides Connect button). **Staging auto-sets this** in `amplify.yml`; override in Console if needed. For production, set here.
 - `NEXT_PUBLIC_SITE_URL` – e.g. `https://staging.example.com` or `https://example.com`
 - Other vars from `.env.example` as needed
+
+**Note:** `NEXT_PUBLIC_*` vars are baked in at build time. GitHub variables do not affect the deployed site—only Amplify Console env vars (or `amplify.yml`) do.
 
 ## Amplify Setup
 
